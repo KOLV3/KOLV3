@@ -5,23 +5,6 @@
 
 ---
 
-## Table of Contents
-
-- [About KOLVE](#about-kolve)
-- [Our Philosophy](#our-philosophy)
-- [Services & Capabilities](#services--capabilities)
-  - [Active Offerings](#active-offerings)
-  - [In Development & Custom Scoping](#in-development--custom-scoping)
-- [How We Work](#how-we-work)
-- [Who We Work With](#who-we-work-with)
-- [Selected Work & Experiments](#selected-work--experiments)
-- [Approach to Technology & AI](#approach-to-technology--ai)
-- [Why KOLVE?](#why-kolve)
-- [Team & Collaboration](#team--collaboration)
-- [Technical Architecture & Local Setup](#technical-architecture--local-setup)
-- [Contact & Project Inquiries](#contact--project-inquiries)
-
----
 
 ## About KOLVE
 
