@@ -113,7 +113,11 @@ export function TimelineItem({ milestone, isLast = false }: TimelineItemProps) {
               <span>Verified Photographic Evidence</span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div
+              className={`grid ${
+                milestone.evidence.length === 1 ? "grid-cols-1" : "grid-cols-1 sm:grid-cols-2"
+              } gap-3`}
+            >
               {milestone.evidence.map((item, idx) => {
                 const isLandscape = item.aspectRatio === "landscape";
                 const isWide = item.aspectRatio === "wide";

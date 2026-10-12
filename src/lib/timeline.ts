@@ -1,6 +1,4 @@
 import { StaticImageData } from "next/image";
-import sandeshPhoto from "../../public/images/team/sandesh-sunar.jpg";
-import ushantPhoto from "../../public/images/team/ushant-giri.jpg";
 import coderushTeamPhoto from "../../public/images/team/coderush-team-victory.jpg";
 
 export type MilestoneCategory =
@@ -164,22 +162,6 @@ export const milestones: TimelineMilestone[] = [
         description:
           "Bhishan Katwal, Jeshis Jamarkatel, Ushant Giri, and Sandesh Sunar holding the championship trophy and gold medals in front of the official FSU CCT Dharan banner.",
         image: coderushTeamPhoto,
-      },
-      {
-        label: "Ushant Giri with Winner Trophy & Medal",
-        type: "photo",
-        aspectRatio: "square",
-        description:
-          "Co-Founder Ushant Giri celebrating the 24-hour hackathon victory at CCT Dharan.",
-        image: ushantPhoto,
-      },
-      {
-        label: "Sandesh Sunar with Winner Trophy & Medal",
-        type: "photo",
-        aspectRatio: "square",
-        description:
-          "Co-Founder Sandesh Sunar with the official gold medal and trophy.",
-        image: sandeshPhoto,
       },
     ],
     links: [
