@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost';
 export type ButtonSize = 'sm' | 'md' | 'lg';
@@ -70,17 +71,38 @@ export const Button = React.forwardRef<
   }
 
   if (href) {
+    const isExternal =
+      href.startsWith('http') ||
+      href.startsWith('mailto:') ||
+      href.startsWith('tel:') ||
+      href.startsWith('#');
+
+    if (isExternal) {
+      return (
+        <a
+          ref={ref as React.ForwardedRef<HTMLAnchorElement>}
+          href={disabled ? undefined : href}
+          className={combinedClassName}
+          aria-disabled={disabled}
+          tabIndex={disabled ? -1 : undefined}
+          {...(rest as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
+        >
+          {children}
+        </a>
+      );
+    }
+
     return (
-      <a
+      <Link
         ref={ref as React.ForwardedRef<HTMLAnchorElement>}
-        href={disabled ? undefined : href}
+        href={disabled ? '#' : href}
         className={combinedClassName}
         aria-disabled={disabled}
         tabIndex={disabled ? -1 : undefined}
-        {...(rest as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
+        {...(rest as unknown as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
       >
         {children}
-      </a>
+      </Link>
     );
   }
 
