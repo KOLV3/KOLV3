@@ -1,5 +1,6 @@
 import { StaticImageData } from "next/image";
 import sandeshPhoto from "../../public/images/team/sandesh-sunar.jpg";
+import ushantPhoto from "../../public/images/team/ushant-giri.jpg";
 
 export interface CoFounder {
   name: string;
@@ -21,13 +22,14 @@ export const coFounders: CoFounder[] = [
     name: "Ushant Giri",
     initials: "UG",
     role: "Co-Founder",
-    focus: "Technical Direction & Systems",
-    discipline: "Core Engineering",
+    focus: "Technical Direction, Backend & Systems",
+    discipline: "Backend & Systems",
     location: "Sunsari, Nepal",
-    bio: "Specializes in software architecture, Next.js web systems, responsive layouts, and performance optimization.",
-    tags: ["Systems Architecture", "Next.js", "TypeScript"],
-    hasPhoto: false,
-    photoSlotNote: "Portrait slot ready",
+    bio: "Specializes in software architecture, backend engineering, databases (Supabase, Firebase), and high-performance APIs with FastAPI and Next.js.",
+    tags: ["Backend", "Supabase", "FastAPI", "Firebase", "Databases"],
+    photo: ushantPhoto,
+    hasPhoto: true,
+    photoAlt: "Ushant Giri, Co-Founder of KOLVE",
   },
   {
     name: "Sandesh Sunar",
