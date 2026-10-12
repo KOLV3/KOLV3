@@ -3,49 +3,14 @@ import { MapPin, CheckCircle2, ShieldCheck, Cpu, Layers } from "lucide-react";
 import { Container } from "../../components/ui/Container";
 import { Section } from "../../components/ui/Section";
 import { Button } from "../../components/ui/Button";
-import { Card } from "../../components/ui/Card";
 import { Badge } from "../../components/ui/Badge";
+import { CoFoundersGrid } from "../../components/team/CoFoundersGrid";
 
 export const metadata: Metadata = {
   title: "About KOLVE | Digital Service Provider & Problem Solvers",
   description:
     "Learn about KOLVE, our problem-solving philosophy, co-founders Ushant Giri, Sandesh Sunar, Bhishan Katwal, and Jeshis Jamarkatel based in Sunsari, Nepal.",
 };
-
-const founders = [
-  {
-    name: "Ushant Giri",
-    initials: "UG",
-    role: "Co-Founder",
-    focus: "Technical Direction & Systems Development",
-    tags: ["Systems Architecture", "Next.js 16", "TypeScript"],
-    bio: "Focuses on software architecture, frontend engineering, responsive web systems, and practical digital problem solving.",
-  },
-  {
-    name: "Sandesh Sunar",
-    initials: "SS",
-    role: "Co-Founder",
-    focus: "Product Design & User Experience",
-    tags: ["UI/UX Systems", "Figma Tokens", "Usability"],
-    bio: "Focuses on UI/UX workflows, systematic interface design, user journey mapping, and visual hierarchy.",
-  },
-  {
-    name: "Bhishan Katwal",
-    initials: "BK",
-    role: "Co-Founder",
-    focus: "Engineering & Digital Solutions",
-    tags: ["Implementation", "Digital Solutions", "Automation"],
-    bio: "Focuses on core implementation, technical delivery, workflow automation, and custom web services.",
-  },
-  {
-    name: "Jeshis Jamarkatel",
-    initials: "JJ",
-    role: "Co-Founder",
-    focus: "Operations & Creative Production",
-    tags: ["Operations", "Creative Assets", "QA"],
-    bio: "Focuses on project coordination, client requirement analysis, creative asset production, and execution.",
-  },
-];
 
 const principles = [
   {
@@ -191,38 +156,8 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {founders.map((founder) => (
-              <Card key={founder.name} className="flex flex-col justify-between p-6">
-                <div>
-                  <div className="flex h-12 w-12 items-center justify-center rounded-md bg-surface-muted text-accent font-bold text-base">
-                    {founder.initials}
-                  </div>
-                  <h3 className="mt-4 text-base font-bold text-text">{founder.name}</h3>
-                  <span className="text-xs font-semibold text-accent block mt-0.5">
-                    {founder.role}
-                  </span>
-                  <span className="text-[11px] text-text-muted block mt-1 font-medium">
-                    {founder.focus}
-                  </span>
-                  <p className="mt-3 text-xs text-text-muted leading-relaxed">{founder.bio}</p>
-
-                  <div className="mt-4 flex flex-wrap gap-1">
-                    {founder.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="rounded bg-surface-muted px-2 py-0.5 text-[10px] font-mono text-text border border-border"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <div className="mt-6 border-t border-border pt-3">
-                  <span className="text-[10px] font-mono text-accent">Direct Project Contributor</span>
-                </div>
-              </Card>
-            ))}
+          <div className="mt-10">
+            <CoFoundersGrid />
           </div>
         </Container>
       </Section>

@@ -28,6 +28,7 @@ import {
   DesignSystemVisual,
   SecurityPipelineVisual,
 } from "../components/work/ProjectVisuals";
+import { CoFoundersGrid } from "../components/team/CoFoundersGrid";
 
 export default function Home() {
   return (
@@ -575,86 +576,8 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {/* Founder 1 */}
-            <Card className="flex flex-col justify-between p-6">
-              <div>
-                <div className="flex h-12 w-12 items-center justify-center rounded bg-surface-muted text-accent font-bold text-base">
-                  UG
-                </div>
-                <h3 className="mt-4 text-base font-bold text-text">Ushant Giri</h3>
-                <span className="text-xs font-semibold text-accent block mt-0.5">Co-Founder</span>
-                <span className="text-[11px] text-text-muted block mt-1 font-medium">
-                  Technical Direction & Systems
-                </span>
-                <p className="mt-3 text-xs text-text-muted leading-relaxed">
-                  Software architecture, Next.js web systems, responsive layouts, and performance.
-                </p>
-              </div>
-              <div className="mt-5 border-t border-border pt-3">
-                <span className="text-[10px] font-mono text-accent">Core Engineering</span>
-              </div>
-            </Card>
-
-            {/* Founder 2 */}
-            <Card className="flex flex-col justify-between p-6">
-              <div>
-                <div className="flex h-12 w-12 items-center justify-center rounded bg-surface-muted text-accent font-bold text-base">
-                  SS
-                </div>
-                <h3 className="mt-4 text-base font-bold text-text">Sandesh Sunar</h3>
-                <span className="text-xs font-semibold text-accent block mt-0.5">Co-Founder</span>
-                <span className="text-[11px] text-text-muted block mt-1 font-medium">
-                  Product Design & UX
-                </span>
-                <p className="mt-3 text-xs text-text-muted leading-relaxed">
-                  Figma interface design, multi-theme token balance, usability, and design systems.
-                </p>
-              </div>
-              <div className="mt-5 border-t border-border pt-3">
-                <span className="text-[10px] font-mono text-accent">UI/UX Systems</span>
-              </div>
-            </Card>
-
-            {/* Founder 3 */}
-            <Card className="flex flex-col justify-between p-6">
-              <div>
-                <div className="flex h-12 w-12 items-center justify-center rounded bg-surface-muted text-accent font-bold text-base">
-                  BK
-                </div>
-                <h3 className="mt-4 text-base font-bold text-text">Bhishan Katwal</h3>
-                <span className="text-xs font-semibold text-accent block mt-0.5">Co-Founder</span>
-                <span className="text-[11px] text-text-muted block mt-1 font-medium">
-                  Engineering & Digital Solutions
-                </span>
-                <p className="mt-3 text-xs text-text-muted leading-relaxed">
-                  Technical delivery, workflow automation, custom tooling, and implementation.
-                </p>
-              </div>
-              <div className="mt-5 border-t border-border pt-3">
-                <span className="text-[10px] font-mono text-accent">Custom Tooling</span>
-              </div>
-            </Card>
-
-            {/* Founder 4 */}
-            <Card className="flex flex-col justify-between p-6">
-              <div>
-                <div className="flex h-12 w-12 items-center justify-center rounded bg-surface-muted text-accent font-bold text-base">
-                  JJ
-                </div>
-                <h3 className="mt-4 text-base font-bold text-text">Jeshis Jamarkatel</h3>
-                <span className="text-xs font-semibold text-accent block mt-0.5">Co-Founder</span>
-                <span className="text-[11px] text-text-muted block mt-1 font-medium">
-                  Operations & Creative Production
-                </span>
-                <p className="mt-3 text-xs text-text-muted leading-relaxed">
-                  Project coordination, client requirement analysis, creative asset production, and QA.
-                </p>
-              </div>
-              <div className="mt-5 border-t border-border pt-3">
-                <span className="text-[10px] font-mono text-accent">Operations & QA</span>
-              </div>
-            </Card>
+          <div className="mt-10">
+            <CoFoundersGrid />
           </div>
 
           <div className="mt-8 flex justify-center">
