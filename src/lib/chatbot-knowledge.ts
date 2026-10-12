@@ -36,7 +36,7 @@ export function getClientChatReply(userMessage: string): ChatResponse {
   ) {
     return {
       reply:
-        "KOLVE was co-founded by four dedicated individuals based in Sunsari, Nepal:\n\n• Ushant Giri - Technical Direction & Systems Development\n• Sandesh Sunar - Product Design & User Experience\n• Bhishan Katwal - Engineering & Digital Solutions\n• Jeshis Jamarkatel - Operations & Creative Production\n\nWhen you work with KOLVE, you collaborate directly with the creators building your solution, with zero middleman layers.",
+        "KOLVE was co-founded by four dedicated individuals based in Sunsari, Nepal:\n\n• Ushant Giri - Technical Direction & Systems Development\n• Sandesh Sunar - R&D, AI Integrations & Deployment\n• Bhishan Katwal - Engineering & Digital Solutions\n• Jeshis Jamarkatel - Frontend Engineering & UI/UX Design\n\nWhen you work with KOLVE, you collaborate directly with the creators building your solution, with zero middleman layers.",
       suggestedActions: [
         { label: "Read more on About Page", href: "/about/" },
         { label: "Discuss a Project", href: "/contact/" },

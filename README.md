@@ -280,9 +280,9 @@ We bring together complementary backgrounds across software engineering, interfa
 | Co-Founder | Role | Focus Area |
 |---|---|---|
 | **Ushant Giri** | Co-Founder | Technical Direction & Systems Development |
-| **Sandesh Sunar** | Co-Founder | Product Design & User Experience |
+| **Sandesh Sunar** | Co-Founder | Research & Development, AI Integrations & Deployment |
 | **Bhishan Katwal** | Co-Founder | Engineering & Digital Solutions |
-| **Jeshis Jamarkatel** | Co-Founder | Operations & Creative Production |
+| **Jeshis Jamarkatel** | Co-Founder | Frontend Engineering & UI/UX Design |
 
 ### Connect on Socials
 

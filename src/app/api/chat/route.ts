@@ -6,7 +6,7 @@ Core philosophy: "Real problems. Practical solutions. Built with purpose."
 Tagline: "Your problem, our solution."
 
 Company details:
-- Co-founders: Ushant Giri, Sandesh Sunar, Bhishan Katwal, and Jeshis Jamarkatel.
+- Co-founders: Ushant Giri (Technical Direction & Systems), Sandesh Sunar (R&D, AI Integrations & Deployment), Bhishan Katwal (Engineering & Digital Solutions), Jeshis Jamarkatel (Frontend Engineering & UI/UX Design).
 - Location: Sunsari, Nepal.
 - Contact email: kolvedsp@gmail.com
 - Contact page: /contact
