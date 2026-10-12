@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Mail, MapPin } from "lucide-react";
+import { Logo } from "../ui/Logo";
 
 export function Footer() {
   const currentYear = 2026;
@@ -12,12 +13,10 @@ export function Footer() {
           <div className="md:col-span-1">
             <Link
               href="/"
-              className="flex items-center gap-2 text-lg font-bold tracking-tight text-text hover:text-accent transition-colors"
+              className="inline-flex items-center hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring rounded py-0.5"
+              aria-label="KOLVE Homepage"
             >
-              <span className="flex h-7 w-7 items-center justify-center rounded-md bg-accent text-on-accent text-xs font-semibold">
-                K
-              </span>
-              <span>KOLVE</span>
+              <Logo className="h-6 w-auto" height={24} />
             </Link>
             <p className="mt-3 text-xs font-medium text-text-muted">
               Digital Service Provider

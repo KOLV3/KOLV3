@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { ThemeToggle } from "../ThemeToggle";
 import { Button } from "../ui/Button";
+import { Logo } from "../ui/Logo";
 
 interface NavItem {
   label: string;
@@ -58,15 +59,13 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border bg-bg/90 backdrop-blur-md transition-colors duration-200">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* Brand Logo */}
+        {/* Official Brand Logo */}
         <Link
           href="/"
-          className="flex items-center gap-2 text-xl font-bold tracking-tight text-text hover:text-accent transition-colors"
+          className="flex items-center gap-2 hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring rounded py-1"
+          aria-label="KOLVE Homepage"
         >
-          <span className="flex h-8 w-8 items-center justify-center rounded-md bg-accent text-on-accent text-sm font-semibold">
-            K
-          </span>
-          <span className="font-semibold tracking-wider">KOLVE</span>
+          <Logo className="h-7 w-auto" height={28} />
         </Link>
 
         {/* Desktop Navigation */}
