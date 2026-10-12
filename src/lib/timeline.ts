@@ -1,6 +1,7 @@
 import { StaticImageData } from "next/image";
 import sandeshPhoto from "../../public/images/team/sandesh-sunar.jpg";
 import ushantPhoto from "../../public/images/team/ushant-giri.jpg";
+import coderushTeamPhoto from "../../public/images/team/coderush-team-victory.jpg";
 
 export type MilestoneCategory =
   | "founding"
@@ -25,6 +26,8 @@ export interface TimelineEvidenceItem {
   type: "photo" | "certificate" | "repo" | "metric";
   description?: string;
   image?: StaticImageData | string;
+  fullWidth?: boolean;
+  aspectRatio?: "square" | "landscape" | "wide";
 }
 
 export interface TimelineMilestone {
@@ -115,56 +118,73 @@ export const milestones: TimelineMilestone[] = [
     ],
   },
 
-  // 3. Verified Achievement: CCT Campus Hackathon Win (Coderush 2026)
+  // 3. Verified Achievement: FSU-CodeRush 2026 Hackathon Win (Team DeVTime)
   {
     id: "cct-campus-hackathon-win",
-    sortDate: "2026-10-08",
-    dateLabel: "October 2026",
-    title: "1st Place Champions: CCT Campus Hackathon (Coderush 2026)",
+    sortDate: "2026-10-04",
+    dateLabel: "October 3 - 4, 2026",
+    title: "First Place Champions: FSU Code Rush 2026 (Team DeVTime)",
     category: "achievement",
     status: "completed",
     visibility: "published",
     featured: true,
     summary:
-      "KOLVE co-founders won 1st Place at the Coderush 2026 Hackathon hosted at Central Campus of Technology (CCT), Dharan, recognized for rapid prototyping, robust system architecture, and UI/UX design.",
+      "KOLVE founders competing as Team DeVTime won First Place at FSU-CodeRush 2026, a 24-hour hackathon organized by the Free Students' Union at Central Campus of Technology (CCT), Dharan. The team engineered 'CCT-Bus-Tracker' to solve campus student transit delays with live driver phone GPS tracking, ETA calculations, and an administrative oversight portal.",
     details: {
       challenge:
-        "Deliver a complete, functioning digital solution under rigorous time constraints, evaluated by campus faculty and industry judges on technical execution, interface polish, and practical problem solving.",
+        "The competition challenge: 'Find the real problem of CCT college in Dharan and solve it within a 24-hour sprint.' Campus students faced daily uncertainty with college bus schedules, zero visibility into transit locations, and missed classes due to unpredictable transit delays.",
       solution:
-        "Combined full-stack engineering and systematic design tokens into a functional prototype, demonstrating seamless teamwork and rapid development under deadline pressure.",
+        "Built 'CCT-Bus-Tracker' from scratch in 24 hours: 1) A driver app transmitting real-time mobile GPS coordinates, 2) A student dashboard featuring an interactive map, live bus positions, and dynamic ETA arrival calculation, and 3) A centralized web administrative panel for route management, schedule updates, transit notices, and push notifications.",
       outcome:
-        "Officially awarded the Winner Trophy and Gold Medals at Central Campus of Technology (CCT), Dharan.",
+        "Awarded First Place Winner Trophy and Gold Medals by the Free Students' Union (FSU) at Central Campus of Technology (CCT), Dharan. Judged by Sanjeev Shrestha (CEO, Fifteen Roots), Campus Chief Basant Kumar Rai, FSU Event Co-Ordinator Namchhahang Rai, and Peshal Raj Karki.",
       participants: [
-        "Ushant Giri (Co-Founder)",
-        "Sandesh Sunar (Co-Founder)",
-        "KOLVE Engineering & Design",
+        "Bhishan Katwal",
+        "Jeshis Jamarkatel",
+        "Ushant Giri",
+        "Sandesh Sunar",
+        "Team DeVTime",
       ],
       technologies: [
-        "Rapid Prototyping",
         "Next.js",
-        "Full-Stack Architecture",
-        "Figma UI/UX",
+        "Live GPS Telemetry",
+        "Interactive Maps",
+        "ETA Calculation",
+        "Student Dashboard",
+        "Driver App",
+        "Admin Panel",
+        "Push Notifications",
       ],
     },
     evidence: [
       {
-        label: "Ushant Giri with Coderush 2026 Trophy & Medal",
+        label: "Team DeVTime: 1st Place Winners at FSU-CodeRush 2026",
         type: "photo",
+        fullWidth: true,
+        aspectRatio: "landscape",
         description:
-          "Official award ceremony at Central Campus of Technology (CCT), Dharan.",
+          "Bhishan Katwal, Jeshis Jamarkatel, Ushant Giri, and Sandesh Sunar holding the championship trophy and gold medals in front of the official FSU CCT Dharan banner.",
+        image: coderushTeamPhoto,
+      },
+      {
+        label: "Ushant Giri with Winner Trophy & Medal",
+        type: "photo",
+        aspectRatio: "square",
+        description:
+          "Co-Founder Ushant Giri celebrating the 24-hour hackathon victory at CCT Dharan.",
         image: ushantPhoto,
       },
       {
-        label: "Sandesh Sunar with Coderush 2026 Trophy & Medal",
+        label: "Sandesh Sunar with Winner Trophy & Medal",
         type: "photo",
+        aspectRatio: "square",
         description:
-          "Gold medal and trophy awarded for UI/UX and web development excellence.",
+          "Co-Founder Sandesh Sunar with the official gold medal and trophy.",
         image: sandeshPhoto,
       },
     ],
     links: [
       {
-        label: "Read About Our Engineering Team",
+        label: "View Co-Founder Profiles",
         href: "/about#leadership",
         type: "internal",
       },

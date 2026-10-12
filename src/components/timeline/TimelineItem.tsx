@@ -114,32 +114,44 @@ export function TimelineItem({ milestone, isLast = false }: TimelineItemProps) {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {milestone.evidence.map((item, idx) => (
-                <div
-                  key={idx}
-                  className="overflow-hidden rounded border border-border bg-surface flex flex-col"
-                >
-                  {item.image && (
-                    <div className="relative aspect-square w-full bg-surface-muted overflow-hidden">
-                      <Image
-                        src={item.image}
-                        alt={item.label}
-                        fill
-                        className="object-cover object-top transition-transform duration-300 hover:scale-105"
-                        sizes="(max-width: 640px) 100vw, 300px"
-                      />
-                    </div>
-                  )}
-                  <div className="p-2.5">
-                    <p className="text-xs font-bold text-text">{item.label}</p>
-                    {item.description && (
-                      <p className="mt-0.5 text-[11px] text-text-muted leading-normal">
-                        {item.description}
-                      </p>
+              {milestone.evidence.map((item, idx) => {
+                const isLandscape = item.aspectRatio === "landscape";
+                const isWide = item.aspectRatio === "wide";
+                const aspectClass = isLandscape
+                  ? "aspect-[16/11]"
+                  : isWide
+                  ? "aspect-video"
+                  : "aspect-square";
+
+                return (
+                  <div
+                    key={idx}
+                    className={`overflow-hidden rounded border border-border bg-surface flex flex-col ${
+                      item.fullWidth ? "sm:col-span-2" : ""
+                    }`}
+                  >
+                    {item.image && (
+                      <div className={`relative ${aspectClass} w-full bg-surface-muted overflow-hidden`}>
+                        <Image
+                          src={item.image}
+                          alt={item.label}
+                          fill
+                          className="object-cover object-top transition-transform duration-300 hover:scale-105"
+                          sizes={item.fullWidth ? "(max-width: 768px) 100vw, 750px" : "(max-width: 640px) 100vw, 350px"}
+                        />
+                      </div>
                     )}
+                    <div className="p-3">
+                      <p className="text-xs font-bold text-text">{item.label}</p>
+                      {item.description && (
+                        <p className="mt-1 text-[11px] text-text-muted leading-relaxed">
+                          {item.description}
+                        </p>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}
