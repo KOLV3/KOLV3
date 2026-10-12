@@ -9,6 +9,10 @@ import {
   CheckCircle2,
   AlertCircle,
   ShieldCheck,
+  Copy,
+  Check,
+  ExternalLink,
+  RotateCcw,
 } from "lucide-react";
 import { Container } from "../../components/ui/Container";
 import { Section } from "../../components/ui/Section";
@@ -48,14 +52,66 @@ export default function ContactPage() {
 
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+  const [submittedBrief, setSubmittedBrief] = useState<{
+    name: string;
+    email: string;
+    service: string;
+    budget: string;
+    timeline: string;
+    description: string;
+    sentViaApi: boolean;
+  } | null>(null);
+
+  const generateMailtoLink = (data: typeof formData) => {
+    const subject = encodeURIComponent(`[KOLVE Project Inquiry] ${data.service} - ${data.name}`);
+    const body = encodeURIComponent(
+      `Hello KOLVE Co-Founders,\n\nI would like to discuss a project with your team.\n\n` +
+        `Project Summary:\n` +
+        `- Client Name: ${data.name}\n` +
+        `- Email: ${data.email}\n` +
+        `- Primary Service Area: ${data.service}\n` +
+        `- Estimated Scope / Budget: ${data.budget}\n` +
+        `- Desired Timeline: ${data.timeline}\n\n` +
+        `Project Description & Problem Statement:\n` +
+        `${data.description}\n\n` +
+        `Best regards,\n${data.name}`
+    );
+    return `mailto:kolvedsp@gmail.com?subject=${subject}&body=${body}`;
+  };
+
+  const copyBriefToClipboard = async () => {
+    if (!submittedBrief) return;
+    const text =
+      `KOLVE PROJECT INQUIRY BRIEF\n` +
+      `---------------------------\n` +
+      `Name: ${submittedBrief.name}\n` +
+      `Email: ${submittedBrief.email}\n` +
+      `Service: ${submittedBrief.service}\n` +
+      `Scope/Budget: ${submittedBrief.budget}\n` +
+      `Timeline: ${submittedBrief.timeline}\n\n` +
+      `Description:\n${submittedBrief.description}\n`;
+
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    } catch {
+      // Fallback
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg(null);
-    setSuccessMsg(null);
 
-    // Client-side quick check
+    // Anti-spam honeypot
+    if (formData.honeypot.trim() !== "") {
+      setErrorMsg("Spam detected. Submission ignored.");
+      return;
+    }
+
+    // Client-side validation
     if (!formData.name.trim() || formData.name.trim().length < 2) {
       setErrorMsg("Please provide your name (at least 2 characters).");
       return;
@@ -73,38 +129,71 @@ export default function ContactPage() {
 
     setLoading(true);
 
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+    const web3formsKey = process.env.NEXT_PUBLIC_WEB3FORMS_KEY;
+    let deliveredViaWeb3Forms = false;
 
-      const data = await res.json();
+    // If Web3Forms access key is configured, post directly to Web3Forms API
+    if (web3formsKey) {
+      try {
+        const response = await fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            access_key: web3formsKey,
+            name: formData.name.trim(),
+            email: formData.email.trim(),
+            subject: `[KOLVE Project Inquiry] ${formData.service} from ${formData.name}`,
+            service: formData.service,
+            budget: formData.budget,
+            timeline: formData.timeline,
+            message: formData.description.trim(),
+            from_name: "KOLVE Official Website",
+          }),
+        });
 
-      if (!res.ok) {
-        throw new Error(data.error || "Submission failed. Please try again.");
+        const result = await response.json();
+        if (result.success) {
+          deliveredViaWeb3Forms = true;
+        }
+      } catch {
+        // Fall through gracefully to direct dispatch without showing 404
       }
-
-      setSuccessMsg(
-        data.message ||
-          "Your inquiry has been submitted. Our team will review and reply within 24 hours."
-      );
-      setFormData({
-        name: "",
-        email: "",
-        service: serviceOptions[0],
-        budget: budgetRanges[0],
-        timeline: timelineOptions[1],
-        description: "",
-        honeypot: "",
-      });
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Failed to submit form. You can also email us directly.";
-      setErrorMsg(msg);
-    } finally {
-      setLoading(false);
     }
+
+    // Set submitted brief state
+    setSubmittedBrief({
+      name: formData.name.trim(),
+      email: formData.email.trim(),
+      service: formData.service,
+      budget: formData.budget,
+      timeline: formData.timeline,
+      description: formData.description.trim(),
+      sentViaApi: deliveredViaWeb3Forms,
+    });
+
+    // If Web3Forms was not active, trigger pre-filled email client helper automatically
+    if (!deliveredViaWeb3Forms) {
+      const mailtoUrl = generateMailtoLink(formData);
+      window.location.href = mailtoUrl;
+    }
+
+    setLoading(false);
+  };
+
+  const handleReset = () => {
+    setSubmittedBrief(null);
+    setFormData({
+      name: "",
+      email: "",
+      service: serviceOptions[0],
+      budget: budgetRanges[0],
+      timeline: timelineOptions[1],
+      description: "",
+      honeypot: "",
+    });
   };
 
   return (
@@ -134,8 +223,8 @@ export default function ContactPage() {
               <div>
                 <h2 className="text-2xl font-bold text-text">Direct Contact</h2>
                 <p className="mt-2 text-sm text-text-muted leading-relaxed">
-                  Prefer direct email over forms? Contact us directly. We welcome technical
-                  questions, project scopes, and requests for private portfolio demos.
+                  Prefer direct communication over forms? Email us anytime. We welcome technical
+                  questions, project scopes, and requests for private portfolio walkthroughs.
                 </p>
 
                 <div className="mt-8 space-y-5 text-sm">
@@ -152,7 +241,7 @@ export default function ContactPage() {
                         kolvedsp@gmail.com
                       </a>
                       <span className="block text-[11px] text-text-muted mt-0.5">
-                        Delivers directly to the founding team
+                        Delivers directly to all four co-founders
                       </span>
                     </div>
                   </div>
@@ -178,7 +267,7 @@ export default function ContactPage() {
                       </strong>
                       <span className="text-sm text-text font-medium">Within 24 Hours</span>
                       <span className="block text-[11px] text-text-muted mt-0.5">
-                        Detailed feedback on technical feasibility and scope
+                        Direct co-founder assessment of feasibility and scope
                       </span>
                     </div>
                   </div>
@@ -192,185 +281,281 @@ export default function ContactPage() {
                   <span>Privacy & Communication Guarantee</span>
                 </div>
                 <p className="mt-2 leading-relaxed">
-                  Your project specifications, email, and files are kept strictly confidential. We
-                  never share client inquiries or send marketing spam.
+                  Your project specifications, email, and ideas remain strictly confidential. We
+                  never share client inquiries, sell contact data, or send marketing spam.
                 </p>
               </div>
             </div>
 
-            {/* Right Column: Project Inquiry Form */}
+            {/* Right Column: Project Inquiry Form / Submission State */}
             <div className="lg:col-span-7">
               <div className="rounded-md border border-border bg-bg p-6 sm:p-8 shadow-sm">
-                <h3 className="text-xl font-bold text-text">Project Inquiry Form</h3>
-                <p className="mt-1 text-xs text-text-muted">
-                  Fill out the details below. All fields with * are required.
-                </p>
-
-                {errorMsg && (
-                  <div className="mt-6 flex items-start gap-3 rounded-md border border-error/20 bg-error/10 p-4 text-xs text-error">
-                    <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
-                    <span>{errorMsg}</span>
-                  </div>
-                )}
-
-                {successMsg && (
-                  <div className="mt-6 flex items-start gap-3 rounded-md border border-success/20 bg-success/10 p-4 text-xs text-success">
-                    <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5" />
-                    <div>
-                      <strong className="block font-semibold">Inquiry Dispatched</strong>
-                      <span>{successMsg}</span>
-                    </div>
-                  </div>
-                )}
-
-                <form onSubmit={handleSubmit} className="mt-6 space-y-5">
-                  {/* Honeypot field (hidden from view) */}
-                  <div className="hidden" aria-hidden="true">
-                    <label htmlFor="honeypot">Leave blank</label>
-                    <input
-                      id="honeypot"
-                      type="text"
-                      tabIndex={-1}
-                      autoComplete="off"
-                      value={formData.honeypot}
-                      onChange={(e) => setFormData({ ...formData, honeypot: e.target.value })}
-                    />
-                  </div>
-
-                  {/* Name & Email Row */}
-                  <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                    <div>
-                      <label htmlFor="name" className="block text-xs font-semibold text-text">
-                        Your Name *
-                      </label>
-                      <input
-                        id="name"
-                        type="text"
-                        required
-                        placeholder="e.g. Aayush Shrestha"
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="mt-1.5 w-full rounded border border-border bg-surface px-3 py-2 text-sm text-text placeholder:text-text-muted/60 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
-                      />
-                    </div>
-
-                    <div>
-                      <label htmlFor="email" className="block text-xs font-semibold text-text">
-                        Your Email Address *
-                      </label>
-                      <input
-                        id="email"
-                        type="email"
-                        required
-                        placeholder="name@company.com"
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="mt-1.5 w-full rounded border border-border bg-surface px-3 py-2 text-sm text-text placeholder:text-text-muted/60 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Service selection */}
-                  <div>
-                    <label htmlFor="service" className="block text-xs font-semibold text-text">
-                      Primary Service Area *
-                    </label>
-                    <select
-                      id="service"
-                      value={formData.service}
-                      onChange={(e) => setFormData({ ...formData, service: e.target.value })}
-                      className="mt-1.5 w-full rounded border border-border bg-surface px-3 py-2 text-sm text-text focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
-                    >
-                      {serviceOptions.map((opt) => (
-                        <option key={opt} value={opt}>
-                          {opt}
-                        </option>
-                      ))}
-                    </select>
-                    <span className="mt-1 block text-[11px] text-text-muted">
-                      Select &quot;Not sure yet&quot; if you need help choosing the best technical approach.
-                    </span>
-                  </div>
-
-                  {/* Budget & Timeline */}
-                  <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                    <div>
-                      <label htmlFor="budget" className="block text-xs font-semibold text-text">
-                        Estimated Scope / Budget
-                      </label>
-                      <select
-                        id="budget"
-                        value={formData.budget}
-                        onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                        className="mt-1.5 w-full rounded border border-border bg-surface px-3 py-2 text-sm text-text focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
-                      >
-                        {budgetRanges.map((range) => (
-                          <option key={range} value={range}>
-                            {range}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div>
-                      <label htmlFor="timeline" className="block text-xs font-semibold text-text">
-                        Desired Timeline
-                      </label>
-                      <select
-                        id="timeline"
-                        value={formData.timeline}
-                        onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
-                        className="mt-1.5 w-full rounded border border-border bg-surface px-3 py-2 text-sm text-text focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
-                      >
-                        {timelineOptions.map((time) => (
-                          <option key={time} value={time}>
-                            {time}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-
-                  {/* Project description */}
-                  <div>
-                    <label htmlFor="description" className="block text-xs font-semibold text-text">
-                      Project Description & Core Problem *
-                    </label>
-                    <textarea
-                      id="description"
-                      rows={5}
-                      required
-                      placeholder="Describe what you want to build, the problem you are solving, or key requirements..."
-                      value={formData.description}
-                      onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                      className="mt-1.5 w-full rounded border border-border bg-surface px-3 py-2 text-sm text-text placeholder:text-text-muted/60 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent leading-relaxed"
-                    />
-                  </div>
-
-                  {/* Submit Button */}
-                  <div className="pt-2">
-                    <button
-                      type="submit"
-                      disabled={loading}
-                      className="inline-flex w-full items-center justify-center gap-2 rounded bg-accent px-5 py-3 text-sm font-semibold text-on-accent transition-colors hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring disabled:opacity-50"
-                    >
-                      {loading ? (
-                        <span>Validating and Sending...</span>
-                      ) : (
-                        <>
-                          <span>Submit Project Inquiry</span>
-                          <Send className="h-4 w-4" />
-                        </>
-                      )}
-                    </button>
-                    <p className="mt-2 text-center text-[11px] text-text-muted">
-                      Or send an email directly to{" "}
-                      <a href="mailto:kolvedsp@gmail.com" className="text-accent underline">
-                        kolvedsp@gmail.com
-                      </a>
+                {!submittedBrief ? (
+                  <>
+                    <h3 className="text-xl font-bold text-text">Project Inquiry Form</h3>
+                    <p className="mt-1 text-xs text-text-muted">
+                      Fill out your project details. All fields marked with * are required.
                     </p>
+
+                    {errorMsg && (
+                      <div className="mt-6 flex items-start gap-3 rounded-md border border-error/20 bg-error/10 p-4 text-xs text-error">
+                        <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
+                        <span>{errorMsg}</span>
+                      </div>
+                    )}
+
+                    <form onSubmit={handleSubmit} className="mt-6 space-y-5">
+                      {/* Honeypot field (hidden from view) */}
+                      <div className="hidden" aria-hidden="true">
+                        <label htmlFor="honeypot">Leave blank</label>
+                        <input
+                          id="honeypot"
+                          type="text"
+                          tabIndex={-1}
+                          autoComplete="off"
+                          value={formData.honeypot}
+                          onChange={(e) =>
+                            setFormData({ ...formData, honeypot: e.target.value })
+                          }
+                        />
+                      </div>
+
+                      {/* Name & Email Row */}
+                      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                        <div>
+                          <label htmlFor="name" className="block text-xs font-semibold text-text">
+                            Your Name *
+                          </label>
+                          <input
+                            id="name"
+                            type="text"
+                            required
+                            placeholder="e.g. Aayush Shrestha"
+                            value={formData.name}
+                            onChange={(e) =>
+                              setFormData({ ...formData, name: e.target.value })
+                            }
+                            className="mt-1.5 w-full rounded border border-border bg-surface px-3 py-2 text-sm text-text placeholder:text-text-muted/60 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                          />
+                        </div>
+
+                        <div>
+                          <label htmlFor="email" className="block text-xs font-semibold text-text">
+                            Your Email Address *
+                          </label>
+                          <input
+                            id="email"
+                            type="email"
+                            required
+                            placeholder="name@company.com"
+                            value={formData.email}
+                            onChange={(e) =>
+                              setFormData({ ...formData, email: e.target.value })
+                            }
+                            className="mt-1.5 w-full rounded border border-border bg-surface px-3 py-2 text-sm text-text placeholder:text-text-muted/60 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Service selection */}
+                      <div>
+                        <label htmlFor="service" className="block text-xs font-semibold text-text">
+                          Primary Service Area *
+                        </label>
+                        <select
+                          id="service"
+                          value={formData.service}
+                          onChange={(e) =>
+                            setFormData({ ...formData, service: e.target.value })
+                          }
+                          className="mt-1.5 w-full rounded border border-border bg-surface px-3 py-2 text-sm text-text focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                        >
+                          {serviceOptions.map((opt) => (
+                            <option key={opt} value={opt}>
+                              {opt}
+                            </option>
+                          ))}
+                        </select>
+                        <span className="mt-1 block text-[11px] text-text-muted">
+                          Select &quot;Not sure yet&quot; if you need guidance scoping the problem.
+                        </span>
+                      </div>
+
+                      {/* Budget & Timeline */}
+                      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                        <div>
+                          <label htmlFor="budget" className="block text-xs font-semibold text-text">
+                            Estimated Scope / Budget
+                          </label>
+                          <select
+                            id="budget"
+                            value={formData.budget}
+                            onChange={(e) =>
+                              setFormData({ ...formData, budget: e.target.value })
+                            }
+                            className="mt-1.5 w-full rounded border border-border bg-surface px-3 py-2 text-sm text-text focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                          >
+                            {budgetRanges.map((range) => (
+                              <option key={range} value={range}>
+                                {range}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+
+                        <div>
+                          <label htmlFor="timeline" className="block text-xs font-semibold text-text">
+                            Desired Timeline
+                          </label>
+                          <select
+                            id="timeline"
+                            value={formData.timeline}
+                            onChange={(e) =>
+                              setFormData({ ...formData, timeline: e.target.value })
+                            }
+                            className="mt-1.5 w-full rounded border border-border bg-surface px-3 py-2 text-sm text-text focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                          >
+                            {timelineOptions.map((time) => (
+                              <option key={time} value={time}>
+                                {time}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+
+                      {/* Project description */}
+                      <div>
+                        <label
+                          htmlFor="description"
+                          className="block text-xs font-semibold text-text"
+                        >
+                          Project Description & Core Problem *
+                        </label>
+                        <textarea
+                          id="description"
+                          rows={5}
+                          required
+                          placeholder="Describe what you want to build, the practical problem you are solving, or key requirements..."
+                          value={formData.description}
+                          onChange={(e) =>
+                            setFormData({ ...formData, description: e.target.value })
+                          }
+                          className="mt-1.5 w-full rounded border border-border bg-surface px-3 py-2 text-sm text-text placeholder:text-text-muted/60 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent leading-relaxed"
+                        />
+                      </div>
+
+                      {/* Submit Button */}
+                      <div className="pt-2">
+                        <button
+                          type="submit"
+                          disabled={loading}
+                          className="inline-flex w-full items-center justify-center gap-2 rounded bg-accent px-5 py-3 text-sm font-semibold text-on-accent transition-colors hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring disabled:opacity-50"
+                        >
+                          {loading ? (
+                            <span>Preparing Submission...</span>
+                          ) : (
+                            <>
+                              <span>Submit Project Inquiry</span>
+                              <Send className="h-4 w-4" />
+                            </>
+                          )}
+                        </button>
+                        <p className="mt-2.5 text-center text-[11px] text-text-muted">
+                          Or reach out directly via{" "}
+                          <a href="mailto:kolvedsp@gmail.com" className="text-accent underline font-medium">
+                            kolvedsp@gmail.com
+                          </a>
+                        </p>
+                      </div>
+                    </form>
+                  </>
+                ) : (
+                  /* Form Success & Structured Brief View */
+                  <div className="space-y-6">
+                    <div className="flex items-start gap-3 rounded-md border border-success/30 bg-success/10 p-4 text-success">
+                      <CheckCircle2 className="h-5 w-5 shrink-0 mt-0.5" />
+                      <div>
+                        <h4 className="font-bold text-sm">
+                          {submittedBrief.sentViaApi
+                            ? "Inquiry Sent to KOLVE Co-Founders"
+                            : "Inquiry Brief Generated Successfully"}
+                        </h4>
+                        <p className="mt-1 text-xs text-text-muted">
+                          {submittedBrief.sentViaApi
+                            ? "Your project details were delivered directly to kolvedsp@gmail.com. Our co-founders will review and reply within 24 hours."
+                            : "Your email client was opened with your pre-filled inquiry. You can also copy your formatted brief below."}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="rounded-md border border-border bg-surface p-4 text-xs space-y-2.5">
+                      <div className="flex justify-between border-b border-border pb-2">
+                        <span className="text-text-muted">Client Name:</span>
+                        <span className="font-semibold text-text">{submittedBrief.name}</span>
+                      </div>
+                      <div className="flex justify-between border-b border-border pb-2">
+                        <span className="text-text-muted">Email:</span>
+                        <span className="font-semibold text-text">{submittedBrief.email}</span>
+                      </div>
+                      <div className="flex justify-between border-b border-border pb-2">
+                        <span className="text-text-muted">Service Area:</span>
+                        <span className="font-semibold text-text">{submittedBrief.service}</span>
+                      </div>
+                      <div className="flex justify-between border-b border-border pb-2">
+                        <span className="text-text-muted">Scope / Budget:</span>
+                        <span className="font-semibold text-text">{submittedBrief.budget}</span>
+                      </div>
+                      <div className="flex justify-between border-b border-border pb-2">
+                        <span className="text-text-muted">Timeline:</span>
+                        <span className="font-semibold text-text">{submittedBrief.timeline}</span>
+                      </div>
+                      <div className="pt-1">
+                        <span className="block text-text-muted mb-1">Description:</span>
+                        <p className="rounded bg-bg p-2.5 text-text leading-relaxed whitespace-pre-wrap border border-border">
+                          {submittedBrief.description}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap gap-3 pt-2">
+                      <button
+                        type="button"
+                        onClick={copyBriefToClipboard}
+                        className="inline-flex items-center gap-1.5 rounded border border-border bg-surface px-4 py-2 text-xs font-semibold text-text hover:bg-surface-muted transition-colors"
+                      >
+                        {copied ? (
+                          <>
+                            <Check className="h-4 w-4 text-success" />
+                            <span>Copied to Clipboard!</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="h-4 w-4 text-accent" />
+                            <span>Copy Brief to Clipboard</span>
+                          </>
+                        )}
+                      </button>
+
+                      <a
+                        href={generateMailtoLink(formData)}
+                        className="inline-flex items-center gap-1.5 rounded bg-accent px-4 py-2 text-xs font-semibold text-on-accent hover:bg-accent-hover transition-colors"
+                      >
+                        <ExternalLink className="h-4 w-4" />
+                        <span>Open Email to kolvedsp@gmail.com</span>
+                      </a>
+
+                      <button
+                        type="button"
+                        onClick={handleReset}
+                        className="inline-flex items-center gap-1.5 rounded border border-border px-3 py-2 text-xs text-text-muted hover:text-text transition-colors"
+                      >
+                        <RotateCcw className="h-3.5 w-3.5" />
+                        <span>Send Another Message</span>
+                      </button>
+                    </div>
                   </div>
-                </form>
+                )}
               </div>
             </div>
           </div>
