@@ -2,6 +2,7 @@ import { StaticImageData } from "next/image";
 import sandeshPhoto from "../../public/images/team/sandesh-sunar.jpg";
 import ushantPhoto from "../../public/images/team/ushant-giri.jpg";
 import bhishanPhoto from "../../public/images/team/bhishan-katwal.jpg";
+import jeshisPhoto from "../../public/images/team/jeshis-jamarkatel.jpg";
 
 export interface CoFounder {
   name: string;
@@ -67,7 +68,8 @@ export const coFounders: CoFounder[] = [
     location: "Sunsari, Nepal",
     bio: "Specializes in frontend development, systematic UI/UX workflows, Figma interfaces, Canva visuals, and Adobe editing software.",
     tags: ["Frontend", "UI/UX", "Figma", "Canva", "Adobe Suite"],
-    hasPhoto: false,
-    photoSlotNote: "Portrait slot ready",
+    photo: jeshisPhoto,
+    hasPhoto: true,
+    photoAlt: "Jeshis Jamarkatel, Co-Founder of KOLVE",
   },
 ];
