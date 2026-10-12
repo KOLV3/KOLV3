@@ -5,6 +5,7 @@ import { Section } from "../../components/ui/Section";
 import { Button } from "../../components/ui/Button";
 import { Badge } from "../../components/ui/Badge";
 import { CoFoundersGrid } from "../../components/team/CoFoundersGrid";
+import { TimelineSection } from "../../components/timeline/TimelineSection";
 
 export const metadata: Metadata = {
   title: "About KOLVE | Digital Service Provider & Problem Solvers",
@@ -143,7 +144,7 @@ export default function AboutPage() {
       </Section>
 
       {/* The Co-Founders with Visual Avatars & Discipline Tags */}
-      <Section background="default">
+      <Section id="leadership" background="default">
         <Container size="default">
           <div className="max-w-2xl">
             <Badge variant="accent">Leadership</Badge>
@@ -188,6 +189,9 @@ export default function AboutPage() {
           </div>
         </Container>
       </Section>
+
+      {/* Our Journey, Achievements & Milestones Timeline */}
+      <TimelineSection />
 
       {/* CTA */}
       <section className="border-t border-border bg-surface py-16 transition-colors">
