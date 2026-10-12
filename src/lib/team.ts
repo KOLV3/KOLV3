@@ -1,6 +1,7 @@
 import { StaticImageData } from "next/image";
 import sandeshPhoto from "../../public/images/team/sandesh-sunar.jpg";
 import ushantPhoto from "../../public/images/team/ushant-giri.jpg";
+import bhishanPhoto from "../../public/images/team/bhishan-katwal.jpg";
 
 export interface CoFounder {
   name: string;
@@ -49,12 +50,13 @@ export const coFounders: CoFounder[] = [
     initials: "BK",
     role: "Co-Founder",
     focus: "Engineering & Digital Solutions",
-    discipline: "Custom Tooling",
+    discipline: "Custom Tooling & Delivery",
     location: "Sunsari, Nepal",
     bio: "Specializes in technical delivery, workflow automation, custom tooling, and practical digital implementations.",
     tags: ["Implementation", "Digital Solutions", "Automation"],
-    hasPhoto: false,
-    photoSlotNote: "Portrait slot ready",
+    photo: bhishanPhoto,
+    hasPhoto: true,
+    photoAlt: "Bhishan Katwal, Co-Founder of KOLVE",
   },
   {
     name: "Jeshis Jamarkatel",
