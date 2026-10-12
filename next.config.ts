@@ -1,6 +1,15 @@
 import type { NextConfig } from "next";
 
+const isGithubPages = process.env.GITHUB_PAGES === "true";
+
 const nextConfig: NextConfig = {
+  ...(isGithubPages
+    ? {
+        output: "export",
+        basePath: "/KOLV3",
+        images: { unoptimized: true },
+      }
+    : {}),
   poweredByHeader: false,
   async headers() {
     return [
@@ -27,8 +36,6 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-  cacheComponents: true,
-  partialPrefetching: true,
   turbopack: {
     rules: {
       "*.css": {
