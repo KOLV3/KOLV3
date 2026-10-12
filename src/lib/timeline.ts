@@ -86,35 +86,6 @@ export const milestones: TimelineMilestone[] = [
     ],
   },
 
-  // 2. Project Milestone: KOLVE Accessible Design System
-  {
-    id: "kolve-design-system",
-    sortDate: "2026-10-02",
-    dateLabel: "October 2026",
-    title: "Engineering the 5-Tier Accessible Token Architecture",
-    category: "project",
-    status: "completed",
-    visibility: "published",
-    featured: false,
-    summary:
-      "Built and open-documented an accessible color token system using the 60-30-10 distribution rule, achieving WCAG AA contrast compliance across warm cream light and charcoal dark themes.",
-    details: {
-      challenge:
-        "Many digital products treat dark themes as crude inversions causing severe eye strain, while light palettes often feel cold and sterile.",
-      solution:
-        "Engineered a 5-tier warm cream light surface system paired with deep forest green accents, matched with a balanced charcoal dark palette that preserves optical hierarchy.",
-      technologies: ["CSS Variables", "Tailwind CSS", "WCAG AA Contrast", "Next.js"],
-      outcome:
-        "Standardized interface tokens across all internal components and published an in-depth design study.",
-    },
-    links: [
-      {
-        label: "Read Design System Case Study",
-        href: "/work/kolve-design-system",
-        type: "case_study",
-      },
-    ],
-  },
 
   // 3. Verified Achievement: FSU-CodeRush 2026 Hackathon Win (Team DeVTime)
   {
