@@ -15,6 +15,13 @@ import { Section } from "../../components/ui/Section";
 import { Button } from "../../components/ui/Button";
 import { Card } from "../../components/ui/Card";
 import { Badge } from "../../components/ui/Badge";
+import {
+  WebServiceDiagram,
+  UiUxServiceDiagram,
+  GraphicServiceDiagram,
+  VideoServiceDiagram,
+  ThreeDServiceDiagram,
+} from "../../components/home/ServiceDiagrams";
 
 export const metadata: Metadata = {
   title: "Services | KOLVE",
@@ -29,6 +36,7 @@ const activeServices = [
     icon: Code2,
     badge: "Available Now",
     badgeVariant: "accent" as const,
+    diagram: WebServiceDiagram,
     description:
       "Modern, fast, accessible web solutions engineered to perform seamlessly across all screen sizes. From responsive business landing pages to interactive web applications.",
     deliverables: [
@@ -47,6 +55,7 @@ const activeServices = [
     icon: Layout,
     badge: "Available Now",
     badgeVariant: "accent" as const,
+    diagram: UiUxServiceDiagram,
     description:
       "User-centered interface design, thoughtful interaction architecture, and design systems that transform complex workflows into intuitive user experiences.",
     deliverables: [
@@ -65,6 +74,7 @@ const activeServices = [
     icon: Palette,
     badge: "Available Now",
     badgeVariant: "accent" as const,
+    diagram: GraphicServiceDiagram,
     description:
       "Purposeful visual assets, digital branding elements, vector graphics, and marketing collateral designed to communicate authority and trust.",
     deliverables: [
@@ -85,6 +95,7 @@ const upcomingServices = [
     title: "Video Editing & Post-Production",
     icon: Video,
     status: "Coming Soon",
+    diagram: VideoServiceDiagram,
     description:
       "Technical video post-production, product walkthrough edits, explainer pacing, and audio cleanup for digital campaigns and software demonstrations.",
   },
@@ -93,6 +104,7 @@ const upcomingServices = [
     title: "3D Architectural & Product Visualization",
     icon: Box,
     status: "Coming Soon",
+    diagram: ThreeDServiceDiagram,
     description:
       "Photorealistic 3D rendering, spatial visualization, product modeling, and lighting studies created with precise physical dimensions.",
   },
@@ -133,13 +145,14 @@ export default function ServicesPage() {
           <div className="mt-10 space-y-8">
             {activeServices.map((service) => {
               const Icon = service.icon;
+              const Diagram = service.diagram;
               return (
                 <div
                   key={service.slug}
                   className="rounded-md border border-border bg-bg p-6 sm:p-8 transition-colors"
                 >
                   <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
-                    <div className="lg:max-w-xl">
+                    <div className="lg:max-w-xl space-y-4">
                       <div className="flex items-center gap-3">
                         <div className="flex h-10 w-10 items-center justify-center rounded bg-surface-muted text-accent">
                           <Icon className="h-5 w-5" />
@@ -147,34 +160,41 @@ export default function ServicesPage() {
                         <Badge variant={service.badgeVariant}>{service.badge}</Badge>
                       </div>
 
-                      <h3 className="mt-4 text-xl font-bold text-text sm:text-2xl">
-                        {service.title}
-                      </h3>
+                      {/* Visual Architectural Diagram */}
+                      <Diagram />
 
-                      <p className="mt-3 text-sm text-text-muted leading-relaxed">
-                        {service.description}
-                      </p>
+                      <div>
+                        <h3 className="text-xl font-bold text-text sm:text-2xl">
+                          {service.title}
+                        </h3>
 
-                      <div className="mt-4 rounded border border-border bg-surface p-3">
+                        <p className="mt-2 text-sm text-text-muted leading-relaxed">
+                          {service.description}
+                        </p>
+                      </div>
+
+                      <div className="rounded border border-border bg-surface p-3">
                         <span className="text-xs font-semibold text-text">Who it is for:</span>
                         <p className="mt-1 text-xs text-text-muted">{service.idealFor}</p>
                       </div>
                     </div>
 
-                    <div className="lg:w-80 border-t border-border pt-6 lg:border-t-0 lg:border-l lg:pl-8 lg:pt-0">
-                      <h4 className="text-xs font-semibold uppercase tracking-wider text-text">
-                        What We Deliver:
-                      </h4>
-                      <ul className="mt-3 space-y-2 text-xs text-text-muted">
-                        {service.deliverables.map((item, idx) => (
-                          <li key={idx} className="flex items-start gap-2">
-                            <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
+                    <div className="lg:w-80 border-t border-border pt-6 lg:border-t-0 lg:border-l lg:pl-8 lg:pt-0 flex flex-col justify-between">
+                      <div>
+                        <h4 className="text-xs font-semibold uppercase tracking-wider text-text">
+                          What We Deliver:
+                        </h4>
+                        <ul className="mt-3 space-y-2 text-xs text-text-muted">
+                          {service.deliverables.map((item, idx) => (
+                            <li key={idx} className="flex items-start gap-2">
+                              <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
 
-                      <div className="mt-6 flex flex-col gap-2">
+                      <div className="mt-6 pt-4 border-t border-border">
                         <Button
                           href={`/services/${service.slug}`}
                           variant="primary"
@@ -210,9 +230,10 @@ export default function ServicesPage() {
           <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2">
             {upcomingServices.map((service) => {
               const Icon = service.icon;
+              const Diagram = service.diagram;
               return (
-                <Card key={service.slug} className="border-dashed flex flex-col justify-between">
-                  <div>
+                <Card key={service.slug} className="border-dashed flex flex-col justify-between p-6 space-y-4">
+                  <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <div className="flex h-10 w-10 items-center justify-center rounded bg-surface-muted text-text-muted">
                         <Icon className="h-5 w-5" />
@@ -220,13 +241,16 @@ export default function ServicesPage() {
                       <Badge variant="default">{service.status}</Badge>
                     </div>
 
-                    <h3 className="mt-4 text-lg font-bold text-text">{service.title}</h3>
-                    <p className="mt-2 text-sm text-text-muted leading-relaxed">
+                    {/* Visual Architectural Diagram */}
+                    <Diagram />
+
+                    <h3 className="text-lg font-bold text-text">{service.title}</h3>
+                    <p className="text-xs text-text-muted leading-relaxed">
                       {service.description}
                     </p>
                   </div>
 
-                  <div className="mt-6 border-t border-border pt-4">
+                  <div className="border-t border-border pt-3">
                     <Link
                       href={`/services/${service.slug}`}
                       className="text-xs font-medium text-text-muted hover:text-accent"

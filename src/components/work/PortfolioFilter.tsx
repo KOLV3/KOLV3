@@ -6,6 +6,10 @@ import { ArrowRight, FolderKanban } from "lucide-react";
 import { Card } from "../ui/Card";
 import { Badge } from "../ui/Badge";
 import { ProjectItem } from "../../lib/projects";
+import {
+  DesignSystemVisual,
+  SecurityPipelineVisual,
+} from "./ProjectVisuals";
 
 interface PortfolioFilterProps {
   initialProjects: ProjectItem[];
@@ -78,22 +82,28 @@ export function PortfolioFilter({ initialProjects }: PortfolioFilterProps) {
           </div>
         ) : (
           filteredProjects.map((project) => (
-            <Card key={project.slug} className="flex flex-col justify-between p-6 sm:p-8">
-              <div>
+            <Card key={project.slug} className="flex flex-col justify-between p-6 sm:p-8 space-y-5">
+              <div className="space-y-4">
                 <div className="flex items-center justify-between gap-2">
                   <Badge variant="accent">{project.type}</Badge>
-                  <span className="text-xs text-text-muted">{project.category}</span>
+                  <span className="text-xs font-mono text-text-muted">{project.category}</span>
                 </div>
 
-                <h3 className="mt-4 text-xl font-bold text-text hover:text-accent transition-colors">
-                  <Link href={`/work/${project.slug}`}>{project.title}</Link>
-                </h3>
+                {/* Visual Architecture Representation */}
+                {project.slug === "kolve-design-system" && <DesignSystemVisual />}
+                {project.slug === "secure-inquiry-pipeline" && <SecurityPipelineVisual />}
 
-                <p className="mt-3 text-xs text-text-muted leading-relaxed">
-                  {project.summary}
-                </p>
+                <div>
+                  <h3 className="text-xl font-bold text-text hover:text-accent transition-colors">
+                    <Link href={`/work/${project.slug}`}>{project.title}</Link>
+                  </h3>
 
-                <div className="mt-5 flex flex-wrap gap-1.5">
+                  <p className="mt-2 text-xs text-text-muted leading-relaxed">
+                    {project.summary}
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap gap-1.5">
                   {project.tools.map((tool) => (
                     <span
                       key={tool}
@@ -105,7 +115,7 @@ export function PortfolioFilter({ initialProjects }: PortfolioFilterProps) {
                 </div>
               </div>
 
-              <div className="mt-6 border-t border-border pt-4">
+              <div className="border-t border-border pt-4">
                 <Link
                   href={`/work/${project.slug}`}
                   className="inline-flex items-center text-xs font-semibold text-accent hover:underline"

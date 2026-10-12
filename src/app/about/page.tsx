@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { MapPin, CheckCircle2 } from "lucide-react";
+import { MapPin, CheckCircle2, ShieldCheck, Cpu, Layers } from "lucide-react";
 import { Container } from "../../components/ui/Container";
 import { Section } from "../../components/ui/Section";
 import { Button } from "../../components/ui/Button";
@@ -15,45 +15,57 @@ export const metadata: Metadata = {
 const founders = [
   {
     name: "Ushant Giri",
+    initials: "UG",
     role: "Co-Founder",
     focus: "Technical Direction & Systems Development",
+    tags: ["Systems Architecture", "Next.js 16", "TypeScript"],
     bio: "Focuses on software architecture, frontend engineering, responsive web systems, and practical digital problem solving.",
   },
   {
     name: "Sandesh Sunar",
+    initials: "SS",
     role: "Co-Founder",
     focus: "Product Design & User Experience",
+    tags: ["UI/UX Systems", "Figma Tokens", "Usability"],
     bio: "Focuses on UI/UX workflows, systematic interface design, user journey mapping, and visual hierarchy.",
   },
   {
     name: "Bhishan Katwal",
+    initials: "BK",
     role: "Co-Founder",
     focus: "Engineering & Digital Solutions",
+    tags: ["Implementation", "Digital Solutions", "Automation"],
     bio: "Focuses on core implementation, technical delivery, workflow automation, and custom web services.",
   },
   {
     name: "Jeshis Jamarkatel",
+    initials: "JJ",
     role: "Co-Founder",
     focus: "Operations & Creative Production",
+    tags: ["Operations", "Creative Assets", "QA"],
     bio: "Focuses on project coordination, client requirement analysis, creative asset production, and execution.",
   },
 ];
 
 const principles = [
   {
-    title: "1. Real Problems Over Agency Vanity",
+    num: "01",
+    title: "Real Problems Over Agency Vanity",
     desc: "We do not build technology for the sake of buzzwords. If a simple, static website or straightforward tool solves the issue faster and more affordably, that is what we recommend.",
   },
   {
-    title: "2. Practical, Maintainable Engineering",
+    num: "02",
+    title: "Practical, Maintainable Engineering",
     desc: "We prioritize clean architectures that are simple to debug, quick to load, and inexpensive to host. No bloated stacks or unnecessary third-party dependencies.",
   },
   {
-    title: "3. Direct Co-Founder Accountability",
+    num: "03",
+    title: "Direct Co-Founder Accountability",
     desc: "When you engage KOLVE, you collaborate directly with the four individuals who research, design, and code your project. We take personal pride in every line of code.",
   },
   {
-    title: "4. Honest Scoping & Zero AI-Slop",
+    num: "04",
+    title: "Honest Scoping & Zero AI-Slop",
     desc: "We write clean code and custom designs. We decline to present generic AI-generated templates or fabricated credentials as company work.",
   },
 ];
@@ -82,7 +94,7 @@ export default function AboutPage() {
         </Container>
       </section>
 
-      {/* Mission & Vision */}
+      {/* Mission & Vision with Visual Architecture Blueprint */}
       <Section background="surface">
         <Container size="default">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:items-center">
@@ -106,14 +118,43 @@ export default function AboutPage() {
               </p>
             </div>
 
-            <div className="rounded-md border border-border bg-bg p-8 shadow-sm">
-              <h3 className="text-base font-bold text-text">The KOLVE Standard</h3>
-              <ul className="mt-5 space-y-3.5 text-xs text-text-muted">
+            {/* Visual Engineering Blueprint Card */}
+            <div className="rounded-md border border-border bg-bg p-6 sm:p-8 shadow-sm space-y-6">
+              <div className="flex items-center justify-between border-b border-border pb-3">
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="h-5 w-5 text-accent" />
+                  <h3 className="text-sm font-bold text-text">The KOLVE Engineering Standard</h3>
+                </div>
+                <span className="font-mono text-[10px] text-accent">WCAG AA • Edge</span>
+              </div>
+
+              {/* Visual Architecture Summary */}
+              <div className="grid grid-cols-2 gap-2 text-[11px] font-mono">
+                <div className="rounded border border-border bg-surface p-2.5 space-y-1">
+                  <span className="text-text-muted text-[10px] flex items-center gap-1">
+                    <Layers className="h-3 w-3 text-accent" />
+                    <span>Visual Balance</span>
+                  </span>
+                  <span className="block font-bold text-text">60-30-10 Token Ratio</span>
+                  <span className="text-[10px] text-accent">Warm Cream + Forest</span>
+                </div>
+
+                <div className="rounded border border-border bg-surface p-2.5 space-y-1">
+                  <span className="text-text-muted text-[10px] flex items-center gap-1">
+                    <Cpu className="h-3 w-3 text-accent" />
+                    <span>Engine Stack</span>
+                  </span>
+                  <span className="block font-bold text-text">Next.js 16 + TypeScript</span>
+                  <span className="text-[10px] text-accent">Static Export Edge</span>
+                </div>
+              </div>
+
+              <ul className="space-y-3 text-xs text-text-muted">
                 <li className="flex items-start gap-2.5">
                   <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
                   <span>
                     <strong className="text-text">Speed & Performance:</strong> Sub-second load
-                    times and lightweight asset footprints.
+                    times, zero layout shift, and lightweight asset footprints.
                   </span>
                 </li>
                 <li className="flex items-start gap-2.5">
@@ -121,13 +162,6 @@ export default function AboutPage() {
                   <span>
                     <strong className="text-text">Universal Accessibility:</strong> Complete WCAG
                     AA contrast, semantic markup, and responsive layouts.
-                  </span>
-                </li>
-                <li className="flex items-start gap-2.5">
-                  <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                  <span>
-                    <strong className="text-text">Zero Infrastructure Waste:</strong> Low-cost
-                    static and serverless hosting models without redundant servers.
                   </span>
                 </li>
                 <li className="flex items-start gap-2.5">
@@ -143,7 +177,7 @@ export default function AboutPage() {
         </Container>
       </Section>
 
-      {/* The Co-Founders */}
+      {/* The Co-Founders with Visual Avatars & Discipline Tags */}
       <Section background="default">
         <Container size="default">
           <div className="max-w-2xl">
@@ -159,10 +193,10 @@ export default function AboutPage() {
 
           <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {founders.map((founder) => (
-              <Card key={founder.name} className="flex flex-col justify-between">
+              <Card key={founder.name} className="flex flex-col justify-between p-6">
                 <div>
-                  <div className="flex h-12 w-12 items-center justify-center rounded-md bg-surface-muted text-accent font-bold text-lg">
-                    {founder.name[0]}
+                  <div className="flex h-12 w-12 items-center justify-center rounded-md bg-surface-muted text-accent font-bold text-base">
+                    {founder.initials}
                   </div>
                   <h3 className="mt-4 text-base font-bold text-text">{founder.name}</h3>
                   <span className="text-xs font-semibold text-accent block mt-0.5">
@@ -172,9 +206,20 @@ export default function AboutPage() {
                     {founder.focus}
                   </span>
                   <p className="mt-3 text-xs text-text-muted leading-relaxed">{founder.bio}</p>
+
+                  <div className="mt-4 flex flex-wrap gap-1">
+                    {founder.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="rounded bg-surface-muted px-2 py-0.5 text-[10px] font-mono text-text border border-border"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
                 </div>
                 <div className="mt-6 border-t border-border pt-3">
-                  <span className="text-[10px] text-text-muted">Direct Project Contributor</span>
+                  <span className="text-[10px] font-mono text-accent">Direct Project Contributor</span>
                 </div>
               </Card>
             ))}
@@ -193,13 +238,16 @@ export default function AboutPage() {
           </div>
 
           <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2">
-            {principles.map((principle, idx) => (
+            {principles.map((principle) => (
               <div
-                key={idx}
-                className="rounded-md border border-border bg-surface p-6 transition-colors"
+                key={principle.num}
+                className="rounded-md border border-border bg-surface p-6 transition-colors flex flex-col justify-between"
               >
-                <h3 className="text-base font-bold text-text">{principle.title}</h3>
-                <p className="mt-3 text-xs text-text-muted leading-relaxed">{principle.desc}</p>
+                <div>
+                  <span className="font-mono text-xs font-bold text-accent">{principle.num}</span>
+                  <h3 className="mt-2 text-base font-bold text-text">{principle.title}</h3>
+                  <p className="mt-2.5 text-xs text-text-muted leading-relaxed">{principle.desc}</p>
+                </div>
               </div>
             ))}
           </div>
