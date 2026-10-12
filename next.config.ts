@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
     ? {
         output: "export",
         basePath: "/KOLV3",
+        trailingSlash: true,
         images: { unoptimized: true },
       }
     : {}),
