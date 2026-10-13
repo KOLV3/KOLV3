@@ -107,11 +107,19 @@ for (const r of expectedRoutes) {
   check(`Route file exists: ${r}`, fs.existsSync(path.join(rootDir, r)));
 }
 
-// 3. Verify security headers in next.config.ts
+// 3. Verify security configuration in next.config.ts
 const nextConfigContent = fs.readFileSync(path.join(rootDir, "next.config.ts"), "utf-8");
 check("Security header: X-Content-Type-Options: nosniff", nextConfigContent.includes("nosniff"));
 check("Security header: X-Frame-Options: DENY", nextConfigContent.includes("DENY"));
-check("Security header: poweredByHeader: false", nextConfigContent.includes("poweredByHeader: false"));
+check("Security header: Strict-Transport-Security (HSTS)", nextConfigContent.includes("Strict-Transport-Security"));
+check("Security header: Content-Security-Policy (CSP)", nextConfigContent.includes("Content-Security-Policy"));
+check("Security configuration: poweredByHeader: false", nextConfigContent.includes("poweredByHeader: false"));
+check("Security configuration: productionBrowserSourceMaps: false", nextConfigContent.includes("productionBrowserSourceMaps: false"));
+
+// 4. Verify .gitignore protects environment secrets
+const gitignoreContent = fs.readFileSync(path.join(rootDir, ".gitignore"), "utf-8");
+check(".gitignore: excludes .env files", gitignoreContent.includes(".env*.local"));
+check(".gitignore: excludes key/certificate files", gitignoreContent.includes("*.key"));
 
 // 4. Verify theme tokens in globals.css (5-tier off-white light system & coordinated dark system)
 const globalsCss = fs.readFileSync(path.join(rootDir, "src/app/globals.css"), "utf-8");

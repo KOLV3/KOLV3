@@ -101,6 +101,17 @@ export default function ContactPage() {
     }
   };
 
+  // Helper to sanitize input strings against script injection and control characters
+  const sanitizeInput = (str: string, maxLength: number): string => {
+    return str
+      .replace(/\0/g, "")
+      .replace(/[<>]/g, "")
+      .replace(/javascript:/gi, "")
+      .replace(/on\w+=/gi, "")
+      .trim()
+      .slice(0, maxLength);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg(null);
@@ -111,18 +122,23 @@ export default function ContactPage() {
       return;
     }
 
+    const cleanName = sanitizeInput(formData.name, 100);
+    const cleanEmail = sanitizeInput(formData.email, 120);
+    const cleanDesc = sanitizeInput(formData.description, 2500);
+
     // Client-side validation
-    if (!formData.name.trim() || formData.name.trim().length < 2) {
+    if (!cleanName || cleanName.length < 2) {
       setErrorMsg("Please provide your name (at least 2 characters).");
       return;
     }
 
-    if (!formData.email.trim() || !formData.email.includes("@")) {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!cleanEmail || !emailRegex.test(cleanEmail)) {
       setErrorMsg("Please enter a valid email address.");
       return;
     }
 
-    if (!formData.description.trim() || formData.description.trim().length < 10) {
+    if (!cleanDesc || cleanDesc.length < 10) {
       setErrorMsg("Please describe your project or problem in at least 10 characters.");
       return;
     }
@@ -143,13 +159,13 @@ export default function ContactPage() {
           },
           body: JSON.stringify({
             access_key: web3formsKey,
-            name: formData.name.trim(),
-            email: formData.email.trim(),
-            subject: `[KOLVE Project Inquiry] ${formData.service} from ${formData.name}`,
+            name: cleanName,
+            email: cleanEmail,
+            subject: `[KOLVE Project Inquiry] ${formData.service} from ${cleanName}`,
             service: formData.service,
             budget: formData.budget,
             timeline: formData.timeline,
-            message: formData.description.trim(),
+            message: cleanDesc,
             from_name: "KOLVE Official Website",
           }),
         });
@@ -163,20 +179,25 @@ export default function ContactPage() {
       }
     }
 
-    // Set submitted brief state
+    // Set submitted brief state with sanitized data
     setSubmittedBrief({
-      name: formData.name.trim(),
-      email: formData.email.trim(),
+      name: cleanName,
+      email: cleanEmail,
       service: formData.service,
       budget: formData.budget,
       timeline: formData.timeline,
-      description: formData.description.trim(),
+      description: cleanDesc,
       sentViaApi: deliveredViaWeb3Forms,
     });
 
     // If Web3Forms was not active, trigger pre-filled email client helper automatically
     if (!deliveredViaWeb3Forms) {
-      const mailtoUrl = generateMailtoLink(formData);
+      const mailtoUrl = generateMailtoLink({
+        ...formData,
+        name: cleanName,
+        email: cleanEmail,
+        description: cleanDesc,
+      });
       window.location.href = mailtoUrl;
     }
 
@@ -330,6 +351,7 @@ export default function ContactPage() {
                             id="name"
                             type="text"
                             required
+                            maxLength={100}
                             placeholder="e.g. Aayush Shrestha"
                             value={formData.name}
                             onChange={(e) =>
@@ -347,6 +369,7 @@ export default function ContactPage() {
                             id="email"
                             type="email"
                             required
+                            maxLength={120}
                             placeholder="name@company.com"
                             value={formData.email}
                             onChange={(e) =>
@@ -436,6 +459,7 @@ export default function ContactPage() {
                           id="description"
                           rows={5}
                           required
+                          maxLength={2500}
                           placeholder="Describe what you want to build, the practical problem you are solving, or key requirements..."
                           value={formData.description}
                           onChange={(e) =>

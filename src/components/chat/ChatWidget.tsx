@@ -48,10 +48,17 @@ export function ChatWidget() {
   }, [messages, isOpen]);
 
   const handleSend = async (textToSend?: string) => {
-    const query = textToSend || input;
-    if (!query.trim() || loading) return;
+    const rawQuery = textToSend || input;
+    const cleanQuery = rawQuery
+      .replace(/\0/g, "")
+      .replace(/[<>]/g, "")
+      .replace(/javascript:/gi, "")
+      .trim()
+      .slice(0, 500);
 
-    const userMsg: Message = { role: "user", content: query.trim() };
+    if (!cleanQuery || loading) return;
+
+    const userMsg: Message = { role: "user", content: cleanQuery };
     const newMessages = [...messages, userMsg];
     setMessages(newMessages);
     setInput("");
@@ -92,7 +99,7 @@ export function ChatWidget() {
     if (!botReplyText) {
       // Add slight natural delay for realistic interaction feel
       await new Promise((resolve) => setTimeout(resolve, 350));
-      const localResult = getClientChatReply(query);
+      const localResult = getClientChatReply(cleanQuery);
       botReplyText = localResult.reply;
       botActions = localResult.suggestedActions;
     }
@@ -257,6 +264,7 @@ export function ChatWidget() {
           >
             <input
               type="text"
+              maxLength={500}
               placeholder="Ask about our services, team, or process..."
               value={input}
               onChange={(e) => setInput(e.target.value)}
